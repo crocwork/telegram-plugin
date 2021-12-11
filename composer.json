@@ -1,0 +1,9 @@
+{
+    "name": "croqo/oc-telegram-plugin",
+    "type": "october-plugin",
+    "description": "Telegram bot API integration plugin for October CMS",
+    "require": {
+        "composer/installers": "~1.0",
+        "irazasyed/telegram-bot-sdk": "v3.4.1"
+    }
+}

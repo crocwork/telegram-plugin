@@ -1,0 +1,4 @@
+v0.0.1:
+    - Init db tables
+    - create_bots_table.php
+    - create_users_table.php

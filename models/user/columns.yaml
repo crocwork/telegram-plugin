@@ -1,0 +1,19 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+    first_name:
+        label: first name
+        searchable: true
+    last_name:
+        label: last name
+        searchable: true
+    username:
+        label: username
+        searchable: true
+    language_code:
+        label: language (code)
