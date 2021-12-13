@@ -36,7 +36,7 @@ class Bot extends Model
     /**
      * @var array fillable attributes are mass assignable
      */
-    protected $fillable = ['token'];
+    protected $fillable = ['id', 'key'];
 
     /**
     * @var array List of attributes to purge.
@@ -61,7 +61,7 @@ class Bot extends Model
     /**
      * @var array appends attributes to the API representation of the model (ex. toArray())
      */
-    protected $visible = ['id','username'];
+    protected $visible = [];
 
     /**
      * @var array hidden attributes removed from the API representation of the model (ex. toArray())
@@ -77,11 +77,6 @@ class Bot extends Model
     ];
 
     /**
-     * @var string  The storage format of the model's date columns.
-     */
-    protected $dateFormat = 'U';
-
-    /**
      * @var array hasOne and other relations
      */
     public $hasOne = [];
@@ -94,18 +89,27 @@ class Bot extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-
-    public static function api(string $token, bool $async = true): \Telegram\Bot\Api
+    public function getTokenAttribute(): string
     {
-        return new Api($token, $async);
+        if (isset($this->id) && isset($this->key))
+        {
+            return (string) $this->id . ':' . $this->key;
+        }
+        else
+        {
+            return $this->getOriginalPurgeValue('token');
+        }
     }
-
-    private static function tokenExplode(string $token): array
+    public function beforeCreate(): void
     {
-        $x = explode(':', $token);
-        return [
-            'id'    => $x[0],
-            'key'   => $x[1],
-        ];
+        if ($token = (string) $this->token)
+        {
+            $b = new Api($token);
+            trace_log($b->getMe());
+
+            $a = explode(':', $token);
+            $this->id = $a[0];
+            $this->key = $a[1];
+        }
     }
 }

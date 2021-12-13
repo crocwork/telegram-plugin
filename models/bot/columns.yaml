@@ -4,8 +4,8 @@
 
 columns:
     id:
-        label: ID
+        label: 🆔
         disabled: true
-    username:
-        label: '@username'
+    token:
+        label: 🔐
         disabled: true

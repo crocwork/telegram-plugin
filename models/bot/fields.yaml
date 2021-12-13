@@ -4,19 +4,7 @@
 
 fields:
     token:
-        label: Token
-        required: true
-        placeholder: 1234567890:AAAaaaaabbccXxYzZz
-    _setup:
-        type: partial
+        label: Bot token
 
 
-    id:
-        label: 🆔
-        readOnly: true
-        span: left
-    key:
-        label: 🔐
-        readOnly: true
-        span: right
 
