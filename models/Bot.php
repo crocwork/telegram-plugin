@@ -105,6 +105,12 @@ class Bot extends Model
             return (string) $this->getOriginalPurgeValue('token');
         }
     }
+    public function setTokenAttribute(string $token)
+    {
+        $a = explode(':', $token);
+        $this->id = $a[0];
+        $this->key = $a[1];
+    }
     public function beforeCreate(): void
     {
         if ($token = (string) $this->token)
