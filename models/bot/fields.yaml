@@ -5,6 +5,5 @@
 fields:
     token:
         label: Bot token
-
-
-
+        required: true
+        placeholder: 🆔1234567890:🔐AAAAAhGqCDYT4vq0ItPWqZT1rBZLiHcHX8s

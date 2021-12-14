@@ -5,7 +5,17 @@
 columns:
     id:
         label: 🆔
-        disabled: true
-    token:
-        label: 🔐
-        disabled: true
+    username:
+        label: '@***bot'
+    first_name:
+        label: First name
+    last_name:
+        label: Last name
+    is_active:
+        label: Enabled
+    can_join_groups:
+        label: Can join groups
+    can_read_all_group_messages:
+        label: Can read all group messages
+    supports_inline_queries:
+        label: Supports inline queries
