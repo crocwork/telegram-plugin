@@ -5,6 +5,7 @@
 columns:
     id:
         label: 🆔
+        type: number
     username:
         label: '@***bot'
     first_name:
@@ -13,9 +14,19 @@ columns:
         label: Last name
     is_active:
         label: Enabled
+        type: switch
+    updated_at:
+        label: Updated
+        type: timetense
+    created_at:
+        label: Created
+        type: timetense
     can_join_groups:
         label: Can join groups
+        type: switch
     can_read_all_group_messages:
         label: Can read all group messages
+        type: switch
     supports_inline_queries:
         label: Supports inline queries
+        type: switch
