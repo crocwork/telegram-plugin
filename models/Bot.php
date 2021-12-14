@@ -69,8 +69,7 @@ class Bot extends Model
     {
         if ($token = (string) $this->token)
         {
-            $b = new Api($token);
-            if ($bot = $b->getMe())
+            if ($bot = $this->api($token)->getMe())
             {
                 $this->id = $bot->getId();
                 $this->first_name = $bot->getFirstName();
@@ -81,5 +80,14 @@ class Bot extends Model
                 $this->is_active = $bot->getIsBot();
             }
         }
+    }
+    public function api(?string $token = null): Api
+    {
+        $token = $token ?? $this->token ?? null;
+        if ($token)
+        {
+            $this->api = new Api($token);
+        }
+        return $this->api;
     }
 }
