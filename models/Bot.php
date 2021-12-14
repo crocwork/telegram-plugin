@@ -81,6 +81,10 @@ class Bot extends Model
             }
         }
     }
+    public function afterCreate()
+    {
+        // TODO: setWebhook here
+    }
     public function api(?string $token = null): Api
     {
         $token = $token ?? $this->token ?? null;
