@@ -22,6 +22,7 @@ class CreateBotsTable extends Migration
             $table->boolean('can_read_all_group_messages')->default(false);
             $table->boolean('supports_inline_queries')->default(false);
             $table->boolean('is_active')->default(false);
+            $table->json('commands')->nullable();
 
             $table->string('key')->nullable();
 
