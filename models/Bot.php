@@ -102,7 +102,7 @@ class Bot extends Model
         }
         else
         {
-            return $this->getOriginalPurgeValue('token');
+            return (string) $this->getOriginalPurgeValue('token');
         }
     }
     public function beforeCreate(): void
