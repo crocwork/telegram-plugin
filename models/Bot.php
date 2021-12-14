@@ -51,7 +51,12 @@ class Bot extends Model
     /**
      * @var array Attributes to be cast to native types
      */
-    protected $casts = [];
+    protected $casts = [
+        'can_join_groups' => 'boolean',
+        'can_read_all_group_messages' => 'boolean',
+        'supports_inline_queries' => 'boolean',
+        'is_active' => 'boolean',
+    ];
 
     /**
      * @var array jsonable attribute names that are json encoded and decoded from the database
@@ -105,11 +110,16 @@ class Bot extends Model
         if ($token = (string) $this->token)
         {
             $b = new Api($token);
-            trace_log($b->getMe());
-
-            $a = explode(':', $token);
-            $this->id = $a[0];
-            $this->key = $a[1];
+            if ($bot = $b->getMe())
+            {
+                $this->id = $bot->getId();
+                $this->first_name = $bot->getFirstName();
+                $this->last_name = $bot->getLastName();
+                $this->username = $bot->getUsername();
+                $this->can_join_groups = $bot->getCanJoinGroups();
+                $this->supports_inline_queries = $bot->getSupportsInlineQueries();
+                $this->is_active = $bot->getIsBot();
+            }
         }
     }
 }
