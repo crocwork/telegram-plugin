@@ -1,81 +1,35 @@
 <?php namespace Croqo\Telegram\Models;
 
-use Model,
-    Telegram\Bot\Api,
-    Telegram\Bot\Laravel\Facades\Telegram;
+use October\Rain\Database\Model;
+use Telegram\Bot\Api;
 
 /**
  * Bot Model
  */
 class Bot extends Model
 {
-    use \October\Rain\Database\Traits\Purgeable,
-        \October\Rain\Database\Traits\Validation;
+    use \October\Rain\Database\Traits\Purgeable;
 
+    private Api $api;
 
-    /**
-     * @var string table associated with the model
-     */
     public $table = 'croqo_telegram_bots';
-
-    /**
-     * @var string The primary key for the model.
-     */
+    public $incrementing = false;
     protected $primaryKey = 'id';
 
-    /**
-     * @var bool The primary key incrementing.
-     */
-    public $incrementing = false;
-
-    /**
-     * @var array guarded attributes aren't mass assignable
-     */
     protected $guarded = ['*'];
-
-    /**
-     * @var array fillable attributes are mass assignable
-     */
     protected $fillable = ['id', 'key'];
-
-    /**
-    * @var array List of attributes to purge.
-    */
     protected $purgeable = ['token'];
-
-    /**
-     * @var array rules for validation
-     */
-    public $rules = [];
-
-    /**
-     * @var array Attributes to be cast to native types
-     */
     protected $casts = [
         'can_join_groups' => 'boolean',
         'can_read_all_group_messages' => 'boolean',
         'supports_inline_queries' => 'boolean',
         'is_active' => 'boolean',
+        'commands' => 'array',
     ];
 
-    /**
-     * @var array jsonable attribute names that are json encoded and decoded from the database
-     */
-    protected $jsonable = [];
-
-    /**
-     * @var array appends attributes to the API representation of the model (ex. toArray())
-     */
-    protected $visible = [];
-
-    /**
-     * @var array hidden attributes removed from the API representation of the model (ex. toArray())
-     */
+    protected $jsonable = ['commands'];
+    protected $visible = ['*'];
     protected $hidden = [];
-
-    /**
-     * @var array dates attributes that should be mutated to dates
-     */
     protected $dates = [
         'created_at',
         'updated_at'
@@ -105,7 +59,7 @@ class Bot extends Model
             return (string) $this->getOriginalPurgeValue('token');
         }
     }
-    public function setTokenAttribute(string $token)
+    public function setTokenAttribute(string $token): void
     {
         $a = explode(':', $token);
         $this->id = $a[0];
