@@ -7,3 +7,11 @@ fields:
         label: Bot token
         required: true
         placeholder: 🆔1234567890:🔐AAAAAhGqCDYT4vq0ItPWqZT1rBZLiHcHX8s
+        span: left
+    webhook:
+        label: Webhook info ⤵️
+        type: jsonviewer_widget
+        collapsed: true
+        root_collapsable: true
+        with_quotes: false
+        with_links: true

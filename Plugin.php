@@ -16,7 +16,7 @@ class Plugin extends PluginBase
     /**
      * @var array Plugin dependencies
      */
-    public $require = ['RainLab.User'];
+    public $require = ['Pkurg.Jsonviewer','RainLab.User'];
 
     /**
      * Register method, called when the plugin is first registered.

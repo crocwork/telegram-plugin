@@ -7,7 +7,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 use RainLab\User\Facades\Auth;
 use RainLab\User\Models\User as UserModel;
 
-Route::post('/tg', function () {
+Route::post('tg/{id}', function ($id) {
     if ($update = Telegram::getWebhookUpdates())
     {
         $message = $update->getMessage();

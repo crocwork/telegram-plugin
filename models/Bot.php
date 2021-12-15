@@ -2,6 +2,7 @@
 
 use October\Rain\Database\Model;
 use Telegram\Bot\Api;
+use Telegram\Bot\Objects\WebhookInfo;
 
 /**
  * Bot Model
@@ -18,16 +19,17 @@ class Bot extends Model
 
     protected $guarded = ['*'];
     protected $fillable = ['id', 'key'];
-    protected $purgeable = ['token'];
+    protected $purgeable = ['token', 'webhook'];
     protected $casts = [
         'can_join_groups' => 'boolean',
         'can_read_all_group_messages' => 'boolean',
         'supports_inline_queries' => 'boolean',
         'is_active' => 'boolean',
         'commands' => 'array',
+        'webhook' => 'array'
     ];
 
-    protected $jsonable = ['commands'];
+    protected $jsonable = ['commands', 'webhook'];
     protected $visible = ['*'];
     protected $hidden = [];
     protected $dates = [
@@ -48,6 +50,21 @@ class Bot extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    public function getWebhookAttribute(): WebhookInfo|null
+    {
+        $result = null;
+        if (isset($this->id))
+        {
+            $result = $this->api()->getWebhookinfo();
+        }
+        return $result;
+    }
+    public function setWebhookAttribute(string $id): void
+    {
+        $this->api()->setWebhook([
+            'url' => (string) url('tg/'.$id)
+        ]);
+    }
     public function getTokenAttribute(): string
     {
         if (isset($this->id) && isset($this->key))
@@ -83,7 +100,7 @@ class Bot extends Model
     }
     public function afterCreate()
     {
-        // TODO: setWebhook here
+        $this->webhook = $this->id;
     }
     public function api(?string $token = null): Api
     {
