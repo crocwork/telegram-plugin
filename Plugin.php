@@ -2,6 +2,7 @@
 
 use App;
 use Backend;
+use Event;
 use System\Classes\PluginBase;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Telegram\Bot\Laravel\TelegramServiceProvider;
@@ -39,6 +40,10 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
+        Event::listen('telegram.webhookUpdate', function($update) {
+            trace_log($update);
+        });
+
         User::extend(function ($model) {
             $model->hasOne['telegram'] = [
                 TelegramUser::class,
