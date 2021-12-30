@@ -1,7 +1,5 @@
 <?php
 
-use App;
-use Event;
 use Croqo\Telegram\Models\Bot;
 use Telegram\Bot\Laravel\Facades\Telegram;
 

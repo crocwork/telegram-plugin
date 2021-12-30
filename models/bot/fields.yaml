@@ -3,15 +3,43 @@
 # ===================================
 
 fields:
-    token:
-        label: Bot token
-        required: true
-        placeholder: 🆔1234567890:🔐AAAAAhGqCDYT4vq0ItPWqZT1rBZLiHcHX8s
-        span: left
-    webhook:
-        label: Webhook info ⤵️
-        type: jsonviewer_widget
-        collapsed: true
-        root_collapsable: true
-        with_quotes: false
-        with_links: true
+    is_active@update:
+        type: switch
+        tab: Setup
+        span: right
+
+
+tabs:
+    icons:
+        Actions: icon-list
+        Setup: icon-cog
+
+    fields:
+        token:
+            label: 🔐 bot token
+            required: true
+            placeholder: 'example: 1234567890:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw'
+            span: auto
+            tab: Setup
+            comment: The token is a string, that is required to authorize the bot and send requests to the Bot API. It can be used by anyone to control your bot.
+
+        data[actions]@update:
+            tab: Actions
+            type: repeater
+            style: collapsed
+            titleFrom: name
+            maxItems: 100
+            prompt: ✖️ new trigger
+            groups:
+                bot_command:
+                    name: Bot command
+                    description: 'example: /start'
+                    icon: icon-magic
+                    fields:
+                        command:
+                            label: Command
+                            placeholder: 'without leading / slash (max: 32 symbols)'
+                        description:
+                            label: Description
+                            placeholder: 'Few words to make it clear for users (max: 256 symbols)'
+                            type: textarea
