@@ -1,5 +1,6 @@
 <?php namespace Croqo\Telegram\Models;
 
+use Croqo\Telegram\Helpers\Webhook;
 use Croqo\Telegram\Models\User;
 use October\Rain\Database\Model;
 use Telegram\Bot\Api;
@@ -57,7 +58,11 @@ class Bot extends Model
 
     public function getId()
     {
-        if (isset($this->id)) return $this->id;
+        if (isset($this->token))
+        {
+            $a = explode(':', $this->token);
+            return (int) $a[0];
+        }
     }
     // public function getCommandsAttribute()
     // {
@@ -100,21 +105,23 @@ class Bot extends Model
     /**
      * --> $this->webhook
      */
-    // public function getWebhookAttribute(): WebhookInfo|null
-    // {
-    //     $result = null;
-    //     if (isset($this->id))
-    //     {
-    //         $result = $this->api()->getWebhookinfo();
-    //     }
-    //     return $result;
-    // }
-    // public function setWebhookAttribute(string $id): void
-    // {
-    //     $this->api()->setWebhook([
-    //         'url' => (string) url('tg/'.$id)
-    //     ]);
-    // }
+    public function getWebhookAttribute(): \Telegram\Bot\Objects\WebhookInfo
+    {
+        return $this->api()->getWebhookinfo();
+    }
+    public function setWebhookAttribute(bool $bool): void
+    {
+        if ($bool)
+        {
+            $this->api()->setWebhook([
+                'url' => Webhook::url($this->getId())
+            ]);
+        }
+        else
+        {
+            $this->api()->deleteWebhook();
+        }
+    }
 
     /**
      * --> $this->token
@@ -160,8 +167,9 @@ class Bot extends Model
             }
         }
     }
-    public function afterCreate()
+
+    public function afterSave()
     {
-        // $this->webhook = $this->id;
+        $this->webhook = $this->is_active;
     }
 }

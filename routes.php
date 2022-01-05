@@ -1,8 +1,9 @@
 <?php
 
 use Telegram\Bot\Laravel\Facades\Telegram;
+use Croqo\Telegram\Helpers\Webhook;
 
-$path = Config::get('croqo.telegram::webhook.path');
+$path = Webhook::path();
 
 Route::post("{$path}/{id}", function ($id)
 {
