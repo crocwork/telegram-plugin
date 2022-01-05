@@ -13,9 +13,8 @@ class CreateBotsTable extends Migration
     {
         Schema::create('croqo_telegram_bots', function (Blueprint $table) {
             $table->engine = "InnoDB";
-            $table->increments('id');
+            $table->bigInteger('id')->unsigned()->primary();
             $table->boolean('is_active')->default(false)->index();
-            $table->bigInteger('user_id')->unsigned()->index();
             $table->string('token',512)->nullable();
             $table->json('data')->nullable();
             $table->timestamps();

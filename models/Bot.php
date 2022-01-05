@@ -33,10 +33,13 @@ class Bot extends Model
 
     protected $primaryKey = 'id';
 
+    public $incrementing = false;
+
     protected $guarded = ['*'];
 
     protected $fillable = [
         'token',
+        'is_active'
     ];
 
     protected $casts = [];
@@ -149,6 +152,8 @@ class Bot extends Model
     {
         if ($token = (string) $this->token)
         {
+            $this->id = $this->getId();
+
             if ($bot = $this->api($token)->getMe())
             {
                 $user = User::firstOrNew(['id'=>$bot->getId()]);
@@ -162,6 +167,11 @@ class Bot extends Model
                 $user->save();
                 // $this->can_join_groups = $bot->getCanJoinGroups();
                 // $this->supports_inline_queries = $bot->getSupportsInlineQueries();
+
+                $this->is_active = $bot->getIsBot();
+            }
+        }
+    }
 
     public function afterUpdate()
     {

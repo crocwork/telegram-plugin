@@ -14,11 +14,7 @@ class CreateChatsTable extends Migration
         Schema::create('croqo_telegram_chats', function (Blueprint $table) {
             $table->engine = "InnoDB";
             $table->bigInteger('id')->unsigned()->primary();
-            $table->enum('type', ['private', 'group', 'supergroup', 'channel'])->default('private')->index();
-
-            // if private
-            $table->bigInteger('user_id')->unsigned()->nullable()->index();
-
+            $table->enum('type', ['private', 'group', 'supergroup', 'channel'])->nullable()->index();
             $table->json('data')->nullable();
             $table->timestamps();
         });
