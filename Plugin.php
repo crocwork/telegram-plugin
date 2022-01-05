@@ -40,7 +40,8 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-        Event::listen('telegram.webhookUpdate', function($update) {
+        Event::listen('croqo.telegram.update', function($id, $update) {
+            trace_log($id);
             trace_log($update);
         });
         Event::listen('croqo.telegram.token.setup', function($token) {
