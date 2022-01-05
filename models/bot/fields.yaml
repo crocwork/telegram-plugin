@@ -26,8 +26,7 @@ tabs:
         data[actions]@update:
             tab: Actions
             type: repeater
-            style: collapsed
-            titleFrom: name
+            style: default
             maxItems: 100
             prompt: ✖️ new trigger
             groups:
@@ -39,7 +38,9 @@ tabs:
                         command:
                             label: Command
                             placeholder: 'without leading / slash (max: 32 symbols)'
+                            span: auto
                         description:
                             label: Description
                             placeholder: 'Few words to make it clear for users (max: 256 symbols)'
                             type: textarea
+                            span: auto

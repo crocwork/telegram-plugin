@@ -162,10 +162,24 @@ class Bot extends Model
                 $user->save();
                 // $this->can_join_groups = $bot->getCanJoinGroups();
                 // $this->supports_inline_queries = $bot->getSupportsInlineQueries();
-                $this->user_id = $bot->getId();
-                $this->is_active = true;
+
+    public function afterUpdate()
+    {
+        trace_log($this->data);
+        $commands = [];
+        foreach ($this->data['actions'] as $action)
+        {
+            $group = $action['_group'];
+            unset($action['_group']);
+            switch ($group)
+            {
+                case 'bot_command':
+                    array_push($commands, $action);
             }
         }
+        $this->api()->setMyCommands([
+            'commands' => $commands
+        ]);
     }
 
     public function afterSave()

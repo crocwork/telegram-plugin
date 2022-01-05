@@ -11,5 +11,3 @@ columns:
         label: Enabled
         type: switch
         align: center
-    commands_count:
-        label: commands
