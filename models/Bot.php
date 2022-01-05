@@ -21,11 +21,8 @@ class Bot extends Model
     private Api $api;
     public function api(?string $token = null): Api
     {
-        $token = $token ?? $this->token ?? null;
-        if ($token)
-        {
-            $this->api = new Api($token);
-        }
+        $key = $token ?? $this->token;
+        $this->api = $this->api ?? new Api($key);
         return $this->api;
     }
 
@@ -53,10 +50,6 @@ class Bot extends Model
     protected $dates = [
         "created_at",
         "updated_at",
-    ];
-
-    public $hasOne = [
-        'user'       => ['Croqo\Telegram\Models\User'],
     ];
 
     public function getId()
@@ -146,7 +139,6 @@ class Bot extends Model
     //     // $this->id = $a[0];
     //     $this->key = $a[1];
     // }
-
 
     public function beforeCreate(): void
     {
