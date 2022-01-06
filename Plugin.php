@@ -9,6 +9,7 @@ use Telegram\Bot\Laravel\TelegramServiceProvider;
 use RainLab\User\Models\User;
 use Croqo\Telegram\Models\User as TelegramUser;
 use Croqo\Telegram\Models\Bot;
+use Croqo\Telegram\Classes\Action;
 
 /**
  * Telegram Plugin Information File
@@ -48,9 +49,10 @@ class Plugin extends PluginBase
             if ($bot = Bot::find($id)){
                 App::instance('croqo.telegram.bot', $bot);
             } else die;
-        });
-        Event::listen('croqo.telegram.token.setup', function($token) {
-            trace_log($token);
+
+            $act = Action::init();
+            trace_log($act);
+
         });
 
         User::extend(function ($model) {
