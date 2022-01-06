@@ -7,8 +7,5 @@ $path = Webhook::path();
 
 Route::post("{$path}/{id}", function ($id)
 {
-    Event::fire('croqo.telegram.update', [
-        $id,
-        Telegram::getWebhookUpdate(false)
-    ]);
+    Event::fire('croqo.telegram.update', [$id]);
 });
