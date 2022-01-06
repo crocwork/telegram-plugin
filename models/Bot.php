@@ -93,7 +93,7 @@ class Bot extends Model
     //     trace_log($this->commands);
     // }
 
-    public function scopeEnabled($query)
+    public function scopeIsActive($query)
     {
         return $query->where('is_active', true);
     }
