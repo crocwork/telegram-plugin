@@ -168,15 +168,20 @@ class Bot extends Model
     public function afterUpdate()
     {
         trace_log($this->data);
+        $actions = $this->data['actions'];
         $commands = [];
-        foreach ($this->data['actions'] as $action)
+        foreach ($actions as $action)
         {
-            $group = $action['_group'];
-            unset($action['_group']);
-            switch ($group)
+            $triggers = $action['triggers'] ?? [];
+            foreach ($triggers as $trigger)
             {
-                case 'bot_command':
-                    array_push($commands, $action);
+                $group = $trigger['_group'];
+                unset($trigger['_group']);
+                switch ($group)
+                {
+                    case 'bot_command':
+                        array_push($commands, $trigger);
+                }
             }
         }
         $this->api()->setMyCommands([
