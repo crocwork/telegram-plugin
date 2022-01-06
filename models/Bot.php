@@ -1,114 +1,191 @@
 <?php namespace Croqo\Telegram\Models;
 
+use Croqo\Telegram\Helpers\Webhook;
+use Croqo\Telegram\Models\User;
 use October\Rain\Database\Model;
 use Telegram\Bot\Api;
-use Telegram\Bot\Objects\WebhookInfo;
 
 /**
  * Bot Model
  */
 class Bot extends Model
 {
-    use \October\Rain\Database\Traits\Purgeable;
+    use \October\Rain\Database\Traits\Encryptable;
+    protected $encryptable = ['token'];
+
+    use \October\Rain\Database\Traits\Validation;
+    public $rules = [
+        'token'     => 'required|min:32'
+    ];
 
     private Api $api;
+    public function api(?string $token = null): Api
+    {
+        $key = $token ?? $this->token;
+        $this->api = $this->api ?? new Api($key);
+        return $this->api;
+    }
 
     public $table = 'croqo_telegram_bots';
-    public $incrementing = false;
+
     protected $primaryKey = 'id';
 
+    public $incrementing = false;
+
     protected $guarded = ['*'];
-    protected $fillable = ['id', 'key'];
-    protected $purgeable = ['token', 'webhook'];
-    protected $casts = [
-        'can_join_groups' => 'boolean',
-        'can_read_all_group_messages' => 'boolean',
-        'supports_inline_queries' => 'boolean',
-        'is_active' => 'boolean',
-        'commands' => 'array',
-        'webhook' => 'array'
+
+    protected $fillable = [
+        'token',
+        'is_active'
     ];
 
-    protected $jsonable = ['commands', 'webhook'];
+    protected $casts = [];
+    protected $jsonable = ['data'];
     protected $visible = ['*'];
     protected $hidden = [];
-    protected $dates = [
-        'created_at',
-        'updated_at'
-    ];
 
     /**
-     * @var array hasOne and other relations
+     * @var array dates attributes that should be mutated to dates
      */
-    public $hasOne = [];
-    public $hasMany = [];
-    public $belongsTo = [];
-    public $belongsToMany = [];
-    public $morphTo = [];
-    public $morphOne = [];
-    public $morphMany = [];
-    public $attachOne = [];
-    public $attachMany = [];
+    protected $dates = [
+        "created_at",
+        "updated_at",
+    ];
 
-    public function getWebhookAttribute(): WebhookInfo|null
+    public function getId()
     {
-        $result = null;
-        if (isset($this->id))
+        if (isset($this->token))
         {
-            $result = $this->api()->getWebhookinfo();
+            $a = explode(':', $this->token);
+            return (int) $a[0];
         }
-        return $result;
     }
-    public function setWebhookAttribute(string $id): void
+    // public function getCommandsAttribute()
+    // {
+    //     $result = Command::where([
+    //         "bot_id" => $this->getId()
+    //     ])->get();
+    //     return $result;
+    //     // return $this->attributes["commands"] ?? [];
+    // }
+
+    // /**
+    //  * @param string $form_repeater - JSON
+    //  */
+    // public function setCommandsAttribute($form_repeater)
+    // {
+    //     if ($id = $this->getId())
+    //     {
+    //         $collection = new Collection(
+    //             // json_decode($form_repeater, true)
+    //             $form_repeater
+    //         );
+    //         foreach($collection as $item)
+    //         {
+    //             $command = Command::firstOrNew([
+    //                 'command' => $item['command'],
+    //                 'bot_id' => $id
+    //             ]);
+    //             $command->fill($item);
+    //             $command->save();
+    //         }
+    //     }
+    //     trace_log($this->commands);
+    // }
+
+    public function scopeIsActive($query)
     {
-        $this->api()->setWebhook([
-            'url' => (string) url('tg/'.$id)
-        ]);
+        return $query->where('is_active', true);
     }
-    public function getTokenAttribute(): string
+
+    /**
+     * --> $this->webhook
+     */
+    public function getWebhookAttribute(): \Telegram\Bot\Objects\WebhookInfo
     {
-        if (isset($this->id) && isset($this->key))
+        return $this->api()->getWebhookinfo();
+    }
+    public function setWebhookAttribute(bool $bool): void
+    {
+        if ($bool)
         {
-            return (string) $this->id . ':' . $this->key;
+            $this->api()->setWebhook([
+                'url' => Webhook::url($this->getId())
+            ]);
         }
         else
         {
-            return (string) $this->getOriginalPurgeValue('token');
+            $this->api()->deleteWebhook();
         }
     }
-    public function setTokenAttribute(string $token): void
-    {
-        $a = explode(':', $token);
-        $this->id = $a[0];
-        $this->key = $a[1];
-    }
+
+    /**
+     * --> $this->token
+     */
+    // public function getTokenAttribute(): string
+    // {
+    //     if (isset($this->info) && isset($this->key))
+    //     {
+    //         return (string) $this->info['id'] . ':' . $this->key;
+    //     }
+    //     else
+    //     {
+    //         return (string) $this->getOriginalPurgeValue('token');
+    //     }
+    // }
+    // public function setTokenAttribute(string $token): void
+    // {
+    //     $a = explode(':', $token);
+    //     // $this->id = $a[0];
+    //     $this->key = $a[1];
+    // }
+
     public function beforeCreate(): void
     {
         if ($token = (string) $this->token)
         {
+            $this->id = $this->getId();
+
             if ($bot = $this->api($token)->getMe())
             {
-                $this->id = $bot->getId();
-                $this->first_name = $bot->getFirstName();
-                $this->last_name = $bot->getLastName();
-                $this->username = $bot->getUsername();
-                $this->can_join_groups = $bot->getCanJoinGroups();
-                $this->supports_inline_queries = $bot->getSupportsInlineQueries();
+                $user = User::firstOrNew(['id'=>$bot->getId()]);
+                $user->fill([
+                    "is_bot"        => $bot->getIsBot(),
+                    "first_name"    => $bot->getFirstName(),
+                    "last_name"     => $bot->getLastName(),
+                    "username"      => $bot->getUsername(),
+                    "language_code" => $bot->getLanguageCode(),
+                ]);
+                $user->save();
+                // $this->can_join_groups = $bot->getCanJoinGroups();
+                // $this->supports_inline_queries = $bot->getSupportsInlineQueries();
+
                 $this->is_active = $bot->getIsBot();
             }
         }
     }
-    public function afterCreate()
+
+    public function afterUpdate()
     {
-        $this->webhook = $this->id;
-    }
-    public function api(?string $token = null): Api
-    {
-        $token = $token ?? $this->token ?? null;
-        if ($token)
+        trace_log($this->data);
+        $commands = [];
+        foreach ($this->data['actions'] as $action)
         {
-            $this->api = new Api($token);
+            $group = $action['_group'];
+            unset($action['_group']);
+            switch ($group)
+            {
+                case 'bot_command':
+                    array_push($commands, $action);
+            }
         }
-        return $this->api;
+        $this->api()->setMyCommands([
+            'commands' => $commands
+        ]);
+    }
+
+    public function afterSave()
+    {
+        $this->webhook = $this->is_active;
     }
 }

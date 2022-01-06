@@ -7,36 +7,7 @@ columns:
         label: 🆔
         type: number
         align: right
-    username:
-        label: '@***bot'
-        align: center
-    first_name:
-        label: First name
-        align: right
-    last_name:
-        label: Last name
-        align: left
     is_active:
         label: Enabled
-        type: switch
-        align: center
-    updated_at:
-        label: Updated
-        type: timetense
-        align: center
-    created_at:
-        label: Created
-        type: timetense
-        align: center
-    can_join_groups:
-        label: Can join groups
-        type: switch
-        align: center
-    can_read_all_group_messages:
-        label: Can read all group messages
-        type: switch
-        align: center
-    supports_inline_queries:
-        label: Supports inline queries
         type: switch
         align: center

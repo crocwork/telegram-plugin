@@ -1,15 +1,9 @@
 v0.0.1:
     - Init
-v0.0.2:
+v0.1.0:
     - Bot model
     - create_bots_table.php
+    - Chat model
+    - create_chats_table.php
     - User model
     - create_users_table.php
-v0.0.3:
-    - purgeable Bot->token
-    - Bot->id, Bot->key auto-setup
-v0.0.4:
-    - purgeable Bot->webhook
-    - Telegram Bot API webhook auto-setup
-v0.0.5:
-    - JSON viewer (Pkurg.Jsonviewer) form widget

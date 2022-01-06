@@ -8,6 +8,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 use Telegram\Bot\Laravel\TelegramServiceProvider;
 use RainLab\User\Models\User;
 use Croqo\Telegram\Models\User as TelegramUser;
+use Croqo\Telegram\Models\Bot;
 
 /**
  * Telegram Plugin Information File
@@ -17,7 +18,7 @@ class Plugin extends PluginBase
     /**
      * @var array Plugin dependencies
      */
-    public $require = ['Pkurg.Jsonviewer','RainLab.User'];
+    public $require = ['RainLab.User','RainLab.Translate'];
 
     /**
      * Register method, called when the plugin is first registered.
@@ -40,8 +41,16 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-        Event::listen('telegram.webhookUpdate', function($update) {
+        Event::listen('croqo.telegram.update', function($id, $update) {
+            trace_log($id);
             trace_log($update);
+
+            if ($bot = Bot::find($id)){
+                App::instance('croqo.telegram.bot', $bot);
+            } else die;
+        });
+        Event::listen('croqo.telegram.token.setup', function($token) {
+            trace_log($token);
         });
 
         User::extend(function ($model) {
@@ -94,6 +103,21 @@ class Plugin extends PluginBase
                 'icon'        => 'icon-paper-plane',
                 'permissions' => ['croqo.telegram.*'],
                 'order'       => 500,
+                'sideMenu'    =>
+                [
+                    'bots'      => [
+                        'label'       => 'Bots',
+                        'icon'        => 'icon-paper-plane',
+                        'url'         => Backend::url('croqo/telegram/bots'),
+                        'permissions' => ['croqo.telegram.access_bots'],
+                    ],
+                    // 'commands'      => [
+                    //     'label'       => 'Commands',
+                    //     'icon'        => 'icon-paper-plane',
+                    //     'url'         => Backend::url('croqo/telegram/commands'),
+                    //     'permissions' => ['croqo.telegram.access_commands'],
+                    // ],
+                ],
             ],
         ];
     }

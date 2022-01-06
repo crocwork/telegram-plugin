@@ -1,17 +1,21 @@
 <?php
+
+use Croqo\Telegram\Models\Bot;
+
 return [
-    "bots" => [
-        "default" => [
-            "token" => env("TELEGRAM_BOT_TOKEN", null),
-            "certificate_path" => env("TELEGRAM_CERTIFICATE_PATH", null),
-            "webhook_url" => env("TELEGRAM_WEBHOOK_URL", "/telegram"),
-            "commands" => [
-                // Acme\Project\Commands\MyTelegramBot\BotCommand::class
-            ],
-        ],
-    ],
-    "default" => "default",
-    "async_requests" => env("TELEGRAM_ASYNC_REQUESTS", false),
+    "bots" => Bot::all('is_active', 1),
+    // [
+    //     "default" => [
+    //         "token" => env("TELEGRAM_BOT_TOKEN", null),
+    //         "certificate_path" => env("TELEGRAM_CERTIFICATE_PATH", null),
+    //         "webhook_url" => env("TELEGRAM_WEBHOOK_URL", "/telegram"),
+    //         "commands" => [
+    //             // Acme\Project\Commands\MyTelegramBot\BotCommand::class
+    //         ],
+    //     ],
+    // ],
+    "default" => 0,
+    "async_requests" => false,
     "commands" => [
         Telegram\Bot\Commands\HelpCommand::class,
     ],
