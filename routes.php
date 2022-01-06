@@ -1,6 +1,5 @@
 <?php
 
-use Telegram\Bot\Laravel\Facades\Telegram;
 use Croqo\Telegram\Helpers\Webhook;
 
 $path = Webhook::path();

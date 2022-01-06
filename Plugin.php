@@ -29,11 +29,6 @@ class Plugin extends PluginBase
      */
     public function register()
     {
-        // // Register the aliases provided by the packages used by your plugin
-        // App::registerClassAlias('Telegram', Telegram::class);
-
-        // // Register the service providers provided by the packages used by your plugin
-        // App::register(TelegramServiceProvider::class);
     }
 
     /**
@@ -54,14 +49,6 @@ class Plugin extends PluginBase
             trace_log($act);
 
         });
-
-        // User::extend(function ($model) {
-        //     $model->hasOne['telegram'] = [
-        //         TelegramUser::class,
-        //         'key' => 'telegram',
-        //         'otherKey' => 'id'
-        //     ];
-        // });
     }
 
     /**
@@ -113,12 +100,6 @@ class Plugin extends PluginBase
                         'url'         => Backend::url('croqo/telegram/bots'),
                         'permissions' => ['croqo.telegram.access_bots'],
                     ],
-                    // 'commands'      => [
-                    //     'label'       => 'Commands',
-                    //     'icon'        => 'icon-paper-plane',
-                    //     'url'         => Backend::url('croqo/telegram/commands'),
-                    //     'permissions' => ['croqo.telegram.access_commands'],
-                    // ],
                 ],
             ],
         ];
