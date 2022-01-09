@@ -38,13 +38,21 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-        Event::listen('croqo.telegram.update', function($id) {
-            trace_log($id);
+        Event::listen(
+            'croqo.telegram.post',
+            function($id) {
 
-            if ($bot = Bot::find($id)){
+                if ($bot = Bot::findOrFail($id)){
                 App::instance('croqo.telegram.bot', $bot);
-            } else die;
+                    // trace_log( App::make('croqo.telegram.bot') );
+                }
 
+                $update = Webhook::update();
+                Event::fire( 'croqo.telegram.updated', [$update] );
+            }
+                );
+            }
+        );
             $act = Action::init();
             trace_log($act);
 
