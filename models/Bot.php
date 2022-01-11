@@ -42,7 +42,6 @@ class Bot extends Model
     protected $casts = [];
     protected $jsonable = ['data'];
     protected $visible = ['*'];
-    protected $hidden = [];
 
     /**
      * @var array dates attributes that should be mutated to dates
@@ -60,38 +59,6 @@ class Bot extends Model
             return (int) $a[0];
         }
     }
-    // public function getCommandsAttribute()
-    // {
-    //     $result = Command::where([
-    //         "bot_id" => $this->getId()
-    //     ])->get();
-    //     return $result;
-    //     // return $this->attributes["commands"] ?? [];
-    // }
-
-    // /**
-    //  * @param string $form_repeater - JSON
-    //  */
-    // public function setCommandsAttribute($form_repeater)
-    // {
-    //     if ($id = $this->getId())
-    //     {
-    //         $collection = new Collection(
-    //             // json_decode($form_repeater, true)
-    //             $form_repeater
-    //         );
-    //         foreach($collection as $item)
-    //         {
-    //             $command = Command::firstOrNew([
-    //                 'command' => $item['command'],
-    //                 'bot_id' => $id
-    //             ]);
-    //             $command->fill($item);
-    //             $command->save();
-    //         }
-    //     }
-    //     trace_log($this->commands);
-    // }
 
     public function scopeIsActive($query)
     {
@@ -118,27 +85,6 @@ class Bot extends Model
             $this->api()->deleteWebhook();
         }
     }
-
-    /**
-     * --> $this->token
-     */
-    // public function getTokenAttribute(): string
-    // {
-    //     if (isset($this->info) && isset($this->key))
-    //     {
-    //         return (string) $this->info['id'] . ':' . $this->key;
-    //     }
-    //     else
-    //     {
-    //         return (string) $this->getOriginalPurgeValue('token');
-    //     }
-    // }
-    // public function setTokenAttribute(string $token): void
-    // {
-    //     $a = explode(':', $token);
-    //     // $this->id = $a[0];
-    //     $this->key = $a[1];
-    // }
 
     public function beforeCreate(): void
     {
@@ -168,15 +114,20 @@ class Bot extends Model
     public function afterUpdate()
     {
         trace_log($this->data);
+        $actions = $this->data['actions'];
         $commands = [];
-        foreach ($this->data['actions'] as $action)
+        foreach ($actions as $action)
         {
-            $group = $action['_group'];
-            unset($action['_group']);
-            switch ($group)
+            $triggers = $action['triggers'] ?? [];
+            foreach ($triggers as $trigger)
             {
-                case 'bot_command':
-                    array_push($commands, $action);
+                $group = $trigger['_group'];
+                unset($trigger['_group']);
+                switch ($group)
+                {
+                    case 'bot_command':
+                        array_push($commands, $trigger);
+                }
             }
         }
         $this->api()->setMyCommands([

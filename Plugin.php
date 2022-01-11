@@ -4,11 +4,13 @@ use App;
 use Backend;
 use Event;
 use System\Classes\PluginBase;
-use Telegram\Bot\Laravel\Facades\Telegram;
-use Telegram\Bot\Laravel\TelegramServiceProvider;
 use RainLab\User\Models\User;
+
 use Croqo\Telegram\Models\User as TelegramUser;
 use Croqo\Telegram\Models\Bot;
+use Croqo\Telegram\Classes\Action;
+use Croqo\Telegram\Helpers\Update;
+
 
 /**
  * Telegram Plugin Information File
@@ -18,7 +20,7 @@ class Plugin extends PluginBase
     /**
      * @var array Plugin dependencies
      */
-    public $require = ['RainLab.User','RainLab.Translate'];
+    public $require = [];
 
     /**
      * Register method, called when the plugin is first registered.
@@ -27,11 +29,6 @@ class Plugin extends PluginBase
      */
     public function register()
     {
-        // Register the aliases provided by the packages used by your plugin
-        App::registerClassAlias('Telegram', Telegram::class);
-
-        // Register the service providers provided by the packages used by your plugin
-        App::register(TelegramServiceProvider::class);
     }
 
     /**
@@ -41,24 +38,16 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-        Event::listen('croqo.telegram.update', function($id, $update) {
+        Event::listen('croqo.telegram.update', function($id) {
             trace_log($id);
-            trace_log($update);
 
             if ($bot = Bot::find($id)){
                 App::instance('croqo.telegram.bot', $bot);
             } else die;
-        });
-        Event::listen('croqo.telegram.token.setup', function($token) {
-            trace_log($token);
-        });
 
-        User::extend(function ($model) {
-            $model->hasOne['telegram'] = [
-                TelegramUser::class,
-                'key' => 'telegram',
-                'otherKey' => 'id'
-            ];
+            $act = Action::init();
+            trace_log($act);
+
         });
     }
 
@@ -111,12 +100,6 @@ class Plugin extends PluginBase
                         'url'         => Backend::url('croqo/telegram/bots'),
                         'permissions' => ['croqo.telegram.access_bots'],
                     ],
-                    // 'commands'      => [
-                    //     'label'       => 'Commands',
-                    //     'icon'        => 'icon-paper-plane',
-                    //     'url'         => Backend::url('croqo/telegram/commands'),
-                    //     'permissions' => ['croqo.telegram.access_commands'],
-                    // ],
                 ],
             ],
         ];
