@@ -1,9 +1,10 @@
 <?php namespace Croqo\Telegram\Models;
 
+use App;
+use Croqo\Telegram\Classes\Data;
 use Croqo\Telegram\Helpers\Webhook;
 use Croqo\Telegram\Models\User;
 use October\Rain\Database\Model;
-use Telegram\Bot\Api;
 
 /**
  * Bot Model
@@ -18,28 +19,27 @@ class Bot extends Model
         'token'     => 'required|min:32'
     ];
 
-    private Api $api;
-    public function api(?string $token = null): Api
+    private User $user;
+    public function getUserAttribute(): User
     {
-        $key = $token ?? $this->token;
-        $this->api = $this->api ?? new Api($key);
-        return $this->api;
+        if ($user = $this->attributes['user']){
+            return $user;
+        } else {
+            $id = $this->getId();
+            $user = User::id($id);
+            return $user;
+        }
     }
 
     public $table = 'croqo_telegram_bots';
-
     protected $primaryKey = 'id';
-
     public $incrementing = false;
-
     protected $guarded = ['*'];
-
     protected $fillable = [
         'token',
-        'is_active'
+        'data'
     ];
 
-    protected $casts = [];
     protected $jsonable = ['data'];
     protected $visible = ['*'];
 
@@ -51,13 +51,15 @@ class Bot extends Model
         "updated_at",
     ];
 
-    public function getId()
+    public function getIdAttribute(): int
     {
-        if (isset($this->token))
-        {
-            $a = explode(':', $this->token);
-            return (int) $a[0];
-        }
+        $this->attributes['id'] = $result
+            = self::tokenId($this->token);
+        if ($result) return $result;
+    }
+    public function getId(): int
+    {
+         return $this->id;
     }
 
     public function scopeIsActive($query)
@@ -70,73 +72,70 @@ class Bot extends Model
      */
     public function getWebhookAttribute(): \Telegram\Bot\Objects\WebhookInfo
     {
-        return $this->api()->getWebhookinfo();
+        return App::make('croqo.telegram.api')->getWebhookinfo();
     }
     public function setWebhookAttribute(bool $bool): void
     {
         if ($bool)
         {
-            $this->api()->setWebhook([
+            App::make('croqo.telegram.api')->setWebhook([
                 'url' => Webhook::url($this->getId())
             ]);
         }
         else
         {
-            $this->api()->deleteWebhook();
+            App::make('croqo.telegram.api')->deleteWebhook();
         }
     }
 
     public function beforeCreate(): void
     {
-        if ($token = (string) $this->token)
-        {
-            $this->id = $this->getId();
-
-            if ($bot = $this->api($token)->getMe())
-            {
-                $user = User::firstOrNew(['id'=>$bot->getId()]);
-                $user->fill([
-                    "is_bot"        => $bot->getIsBot(),
-                    "first_name"    => $bot->getFirstName(),
-                    "last_name"     => $bot->getLastName(),
-                    "username"      => $bot->getUsername(),
-                    "language_code" => $bot->getLanguageCode(),
-                ]);
-                $user->save();
-                // $this->can_join_groups = $bot->getCanJoinGroups();
-                // $this->supports_inline_queries = $bot->getSupportsInlineQueries();
-
-                $this->is_active = $bot->getIsBot();
-            }
-        }
+        $this->tokenSeed((string) $this->token);
     }
 
     public function afterUpdate()
     {
-        trace_log($this->data);
-        $actions = $this->data['actions'];
-        $commands = [];
-        foreach ($actions as $action)
-        {
-            $triggers = $action['triggers'] ?? [];
-            foreach ($triggers as $trigger)
-            {
-                $group = $trigger['_group'];
-                unset($trigger['_group']);
-                switch ($group)
-                {
-                    case 'bot_command':
-                        array_push($commands, $trigger);
-                }
-            }
-        }
-        $this->api()->setMyCommands([
-            'commands' => $commands
-        ]);
+        // $result = $this->data ?? [];
+        // foreach ($result as $item)
+        // {
+        //     $group = $item['_group'];
+        //     unset($item['_group']);
+        //     switch ($group)
+        //     {
+        //         default: array_push($result[$group],
+        //             Trigger::command(
+        //                 $item['command'],
+        //                 $item['description']
+        //             )
+        //         );
+        //     }
+        // }
+
+        // trace_log($this->data);
+        // $this->api()->setMyCommands([
+        //     'commands' => $result
+        // ]);
     }
 
-    public function afterSave()
+    // public function afterSave()
+    // {
+
+    // }
+
+    private function tokenSeed(string $token)
     {
-        $this->webhook = $this->is_active;
+        if ($bot = $this->api($token)->getMe())
+        {
+            $this->token = $token;
+            $this->id = $this->getId();
+            $this->is_active = true;
+            $this->data = new Data();
+            $this->user = User::from($bot);
+        }
+    }
+    public static function tokenId(string $token): int
+    {
+        $a = explode(':', $token);
+        return (int) $a[0];
     }
 }

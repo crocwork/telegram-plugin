@@ -7,3 +7,6 @@ v0.1.0:
     - create_chats_table.php
     - User model
     - create_users_table.php
+v0.2.0:
+    - Update model
+    - create_updates_table.php

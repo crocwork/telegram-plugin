@@ -16,7 +16,7 @@ class CreateBotsTable extends Migration
             $table->bigInteger('id')->unsigned()->primary();
             $table->boolean('is_active')->default(false)->index();
             $table->string('token',512)->nullable();
-            $table->json('data')->nullable();
+            $table->json('data');
             $table->timestamps();
         });
     }
