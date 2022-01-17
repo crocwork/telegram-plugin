@@ -10,4 +10,11 @@ Route::post("{$path}/{id}", function ($id)
         'croqo.telegram.post',
         [ $id ]
     );
+    $update = Webhook::update();
+    trace_log($update);
+    Event::fire(
+        'croqo.telegram.update',
+        [ $update ]
+    );
+
 });

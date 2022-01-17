@@ -5,6 +5,7 @@ use Croqo\Telegram\Classes\Data;
 use Croqo\Telegram\Helpers\Webhook;
 use Croqo\Telegram\Models\User;
 use October\Rain\Database\Model;
+use Telegram\Bot\Api;
 
 /**
  * Bot Model
@@ -31,11 +32,17 @@ class Bot extends Model
         }
     }
 
+    public function api()
+    {
+        return new Api($this->token, false);
+    }
+
     public $table = 'croqo_telegram_bots';
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $guarded = ['*'];
     protected $fillable = [
+        'is_active',
         'token',
         'data'
     ];
@@ -72,19 +79,20 @@ class Bot extends Model
      */
     public function getWebhookAttribute(): \Telegram\Bot\Objects\WebhookInfo
     {
-        return App::make('croqo.telegram.api')->getWebhookinfo();
+        return $this->api()->getWebhookinfo();
     }
     public function setWebhookAttribute(bool $bool): void
     {
         if ($bool)
         {
-            App::make('croqo.telegram.api')->setWebhook([
-                'url' => Webhook::url($this->getId())
+            $url = Webhook::url($this->getId());
+            $this->api()->setWebhook([
+                'url' => $url
             ]);
         }
         else
         {
-            App::make('croqo.telegram.api')->deleteWebhook();
+            $this->api()->deleteWebhook();
         }
     }
 
@@ -95,6 +103,7 @@ class Bot extends Model
 
     public function afterUpdate()
     {
+        $this->webhook = $this->is_active ?? false;
         // $result = $this->data ?? [];
         // foreach ($result as $item)
         // {
@@ -128,7 +137,7 @@ class Bot extends Model
         {
             $this->token = $token;
             $this->id = $this->getId();
-            $this->is_active = true;
+            $this->webhook = $this->is_active = true;
             $this->data = new Data();
             $this->user = User::from($bot);
         }

@@ -39,24 +39,19 @@ class Plugin extends PluginBase
             'croqo.telegram.post',
             function($id)
             {
-                App::bind('croqo.telegram.update', function($app){
-                    return Webhook::update();
-                });
-
                 $bot = Bot::findOrFail($id);
                 App::instance('croqo.telegram.bot', $bot);
 
-                $api = new Api($bot->token);
+                $api = $bot->api();
                 App::instance('croqo.telegram.api', $api);
-
 
                 Event::fire('croqo.telegram.ready');
             }
         );
-        Event::listen('croqo.telegram.ready', function(){
+        Event::listen('croqo.telegram.update', function($update){
             // $api = App::make('croqo.telegram.api');
             // $bot = App::make('croqo.telegram.bot');
-            $upd = App::make('croqo.telegram.update');
+            $upd = App::instance('croqo.telegram.update', $update);
             $message = $upd->getMessage();
             $entities = $message->getEntities();
             $type = $message->detectType();
