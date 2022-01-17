@@ -35,35 +35,41 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
+        Event::listen('croqo.telegram.command', function($command){
+            trace_log("Command: {$command}");
+            // $bot = App::make('croqo.telegram.bot');
+            // trace_log($bot);
+        });
         Event::listen(
             'croqo.telegram.post',
             function($id)
             {
                 $bot = Bot::findOrFail($id);
                 App::instance('croqo.telegram.bot', $bot);
-
-                $api = $bot->api();
-                App::instance('croqo.telegram.api', $api);
-
-                Event::fire('croqo.telegram.ready');
             }
         );
         Event::listen('croqo.telegram.update', function($update){
             // $api = App::make('croqo.telegram.api');
-            // $bot = App::make('croqo.telegram.bot');
-            $upd = App::instance('croqo.telegram.update', $update);
-            $message = $upd->getMessage();
-            $entities = $message->getEntities();
-            $type = $message->detectType();
+            $bot = App::make('croqo.telegram.bot');
+            trace_log($bot);
+
+            App::instance('croqo.telegram.update', $update);
+            $message = $update->getMessage();
 
             if ($message->hasCommand())
             {
-                Event::fire('croqo.telegram.command');
-                trace_log($message);
-                trace_log($entities);
+                $text = $message->getText();
+                $entities = $message->getEntities();
+
+                $comm = $entities->where('type', 'bot_command')->first();
+                $command = substr($text, $comm['offset'], $comm['length']);
+                $command = trim($command, '/');
+
+                Event::fire('croqo.telegram.command', [$command]);
             }
 
-            switch ($upd->detectType())
+            $type = $message->detectType();
+            switch ($type)
             {
                 // case 'message':
                 // 'edited_message',
@@ -76,15 +82,15 @@ class Plugin extends PluginBase
                 // 'pre_checkout_query',
                 // 'poll',
             }
-            // $type = $upd->detectType();
-            // trace_log( $type );
+            trace_log( "Message type: {$type}" );
 
-            // $chat = $upd->getChat();
-            // trace_log( $chat );
-            // $user = $upd->getFrom();
-            // trace_log( $user );
+            $chat = $message->getChat();
+            trace_log( $chat );
+            $user = $message->getFrom();
+            trace_log( $user );
         });
     }
+
 
     /**
      * Registers any front-end components implemented in this plugin.
