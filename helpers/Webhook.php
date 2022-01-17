@@ -2,7 +2,7 @@
 
 use Config;
 use Input;
-use Croqo\Telegram\Types\Update;
+use Telegram\Bot\Objects\Update;
 
 class Webhook
 {
