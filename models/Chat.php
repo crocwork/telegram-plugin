@@ -1,5 +1,6 @@
 <?php namespace Croqo\Telegram\Models;
 
+use Doctrine\DBAL\Types\BigIntType;
 use Model;
 
 class Chat extends Model
@@ -38,4 +39,13 @@ class Chat extends Model
     {
         return $query->where('type', 'channel');
     }
+    public static function id(BigIntType $i): Chat
+    {
+        $chat =
+            self::find($i) ??
+            self::make([ 'id' => $i ])
+        ;
+        return $chat;
+    }
+
 }

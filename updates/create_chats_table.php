@@ -15,7 +15,7 @@ class CreateChatsTable extends Migration
             $table->engine = "InnoDB";
             $table->bigInteger('id')->unsigned()->primary();
             $table->enum('type', ['private', 'group', 'supergroup', 'channel'])->nullable()->index();
-            $table->json('data')->nullable();
+            $table->json('data');
             $table->timestamps();
         });
     }

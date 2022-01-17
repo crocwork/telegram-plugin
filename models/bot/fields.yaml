@@ -11,7 +11,7 @@ fields:
 
 tabs:
     icons:
-        Actions: icon-list
+        Commands: icon-list
         Setup: icon-cog
 
     fields:
@@ -23,29 +23,67 @@ tabs:
             tab: Setup
             comment: The token is a string, that is required to authorize the bot and send requests to the Bot API. It can be used by anyone to control your bot.
 
-        data[actions]@update:
-            tab: Actions
+        # data[actions]@update:
+        #     tab: Actions
+        #     type: repeater
+        #     style: default
+        #     maxItems: 100
+        #     prompt: ✖️ Action
+        #     form:
+        #         fields:
+        data[commands]@update:
             type: repeater
-            style: default
-            maxItems: 100
-            prompt: ✖️ Action
+            tab: Commands
+            prompt: New 💻 command
+            titleFrom: command
             form:
                 fields:
-                    triggers:
-                        type: repeater
-                        prompt: ✖️ Trigger
-                        groups:
-                            bot_command:
-                                name: Bot command
-                                description: 'example: /start'
-                                icon: icon-magic
-                                fields:
-                                    command:
-                                        label: Command
-                                        placeholder: 'without leading / slash (max: 32 symbols)'
-                                        span: auto
-                                    description:
-                                        label: Description
-                                        placeholder: 'Few words to make it clear for users (max: 256 symbols)'
-                                        type: textarea
-                                        span: auto
+                    scope:
+                        label: Who can run your command?
+                        type: dropdown
+                        span: right
+                        options:
+                            default: Available for all
+                            all_private_chats: All private chats
+                            all_group_chats: All group chats
+                            all_chat_administrators: All chat administrators
+                    command:
+                        label: Command
+                        comment: max = 32 symbols
+                        placeholder: 'without leading "/"'
+                    description:
+                        label: Description
+                        comment: max = 255 symbols
+                        placeholder: 'Few words to make it clean for users'
+                        type: textarea
+                        size: small
+                # bot_command:
+                #     name: /command
+                #     description: 'example: /start'
+                #     icon: icon-magic
+                #     fields:
+                #         command:
+                #             label: Command
+                #             placeholder: 'without leading / slash (max: 32 symbols)'
+                #             span: auto
+                #         description:
+                #             label: Description
+                #             placeholder: 'Few words to make it clear for users (max: 256 symbols)'
+                #             type: textarea
+                #             span: auto
+                #             size: small
+                    # callbacks:
+                    #     type: repeater
+                    #     prompt: ✖️ Callbacks
+                    #     form:
+                    #         fields:
+                    #             text:
+                    #                 label: Keyboard button caption text (or em😊ji)
+                    #                 span: auto
+                    #             callback_data:
+                    #                 type: textarea
+                    #                 label: Callback Data
+                    #                 placeholder: 1-64 bytes
+                    #                 span: auto
+                    #                 size: small
+

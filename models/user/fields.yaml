@@ -6,6 +6,9 @@ fields:
     id:
         label: ID
         disabled: true
+    is_bot:
+        label: Is bot?
+        type: checkbox
     first_name:
         label: first name
         disabled: true

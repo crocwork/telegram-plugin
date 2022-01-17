@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('last_name')->nullable();
             $table->string('username')->nullable();
             $table->string('language_code', 4)->nullable();
-            $table->json('data')->nullable();
+            $table->json('data');
             $table->timestamps();
         });
 

@@ -4,13 +4,10 @@ use App;
 use Backend;
 use Event;
 use System\Classes\PluginBase;
-use RainLab\User\Models\User;
 
-use Croqo\Telegram\Models\User as TelegramUser;
 use Croqo\Telegram\Models\Bot;
-use Croqo\Telegram\Classes\Action;
-use Croqo\Telegram\Helpers\Update;
-
+use Croqo\Telegram\Helpers\Webhook;
+use Telegram\Bot\Api;
 
 /**
  * Telegram Plugin Information File
@@ -38,16 +35,54 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-        Event::listen('croqo.telegram.update', function($id) {
-            trace_log($id);
-
-            if ($bot = Bot::find($id)){
+        Event::listen(
+            'croqo.telegram.post',
+            function($id)
+            {
+                $bot = Bot::findOrFail($id);
                 App::instance('croqo.telegram.bot', $bot);
-            } else die;
 
-            $act = Action::init();
-            trace_log($act);
+                $api = $bot->api();
+                App::instance('croqo.telegram.api', $api);
 
+                Event::fire('croqo.telegram.ready');
+            }
+        );
+        Event::listen('croqo.telegram.update', function($update){
+            // $api = App::make('croqo.telegram.api');
+            // $bot = App::make('croqo.telegram.bot');
+            $upd = App::instance('croqo.telegram.update', $update);
+            $message = $upd->getMessage();
+            $entities = $message->getEntities();
+            $type = $message->detectType();
+
+            if ($message->hasCommand())
+            {
+                Event::fire('croqo.telegram.command');
+                trace_log($message);
+                trace_log($entities);
+            }
+
+            switch ($upd->detectType())
+            {
+                // case 'message':
+                // 'edited_message',
+                // 'channel_post',
+                // 'edited_channel_post',
+                // 'inline_query',
+                // 'chosen_inline_result',
+                // 'callback_query',
+                // 'shipping_query',
+                // 'pre_checkout_query',
+                // 'poll',
+            }
+            // $type = $upd->detectType();
+            // trace_log( $type );
+
+            // $chat = $upd->getChat();
+            // trace_log( $chat );
+            // $user = $upd->getFrom();
+            // trace_log( $user );
         });
     }
 
