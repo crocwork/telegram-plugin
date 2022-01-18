@@ -1,7 +1,6 @@
 <?php namespace Croqo\Telegram\Models;
 
-use App;
-use Croqo\Telegram\Classes\Data;
+use Croqo\Telegram\Classes\CommandScope;
 use Croqo\Telegram\Helpers\Webhook;
 use Croqo\Telegram\Models\User;
 use October\Rain\Database\Model;
@@ -43,7 +42,6 @@ class Bot extends Model
     protected $guarded = ['*'];
     protected $fillable = [
         'is_active',
-        'token',
         'data'
     ];
 
@@ -67,6 +65,24 @@ class Bot extends Model
     public function getId(): int
     {
          return $this->id;
+    }
+
+    public function getCommandsAttribute()
+    {
+        $array = $this->data['commands'];
+        $result = [];
+        foreach ($array as $i)
+        {
+            $scope = $i['scope'];
+            if (!isset($result[$scope])) {
+                $result[$scope] = [];
+            }
+            array_push($result[$scope], [
+                'command' => $i['command'],
+                'description' => $i['description']
+            ]);
+        }
+        return $result;
     }
 
     public function scopeIsActive($query)
@@ -101,45 +117,26 @@ class Bot extends Model
         $this->tokenSeed((string) $this->token);
     }
 
-    public function afterUpdate()
+    public function afterSave()
     {
         $this->webhook = $this->is_active ?? false;
-        // $result = $this->data ?? [];
-        // foreach ($result as $item)
-        // {
-        //     $group = $item['_group'];
-        //     unset($item['_group']);
-        //     switch ($group)
-        //     {
-        //         default: array_push($result[$group],
-        //             Trigger::command(
-        //                 $item['command'],
-        //                 $item['description']
-        //             )
-        //         );
-        //     }
-        // }
-
-        // trace_log($this->data);
-        // $this->api()->setMyCommands([
-        //     'commands' => $result
-        // ]);
+        foreach ($this->commands as $key => $value)
+        {
+            $this->api()->setMyCommands([
+                'commands' => $value,
+                'scope' => new CommandScope((string) $key)
+            ]);
+        }
     }
-
-    // public function afterSave()
-    // {
-
-    // }
 
     private function tokenSeed(string $token)
     {
         if ($bot = $this->api($token)->getMe())
         {
             $this->token = $token;
-            $this->id = $this->getId();
+            $this->id = $bot->getId();
             $this->webhook = $this->is_active = true;
-            $this->data = new Data();
-            $this->user = User::from($bot);
+            $this->data = [];
         }
     }
     public static function tokenId(string $token): int
