@@ -5,6 +5,7 @@ use Croqo\Telegram\Helpers\Webhook;
 use Croqo\Telegram\Models\User;
 use October\Rain\Database\Model;
 use Telegram\Bot\Api;
+use Telegram\Bot\Objects\BotCommand;
 
 /**
  * Bot Model
@@ -73,14 +74,7 @@ class Bot extends Model
         $result = [];
         foreach ($array as $i)
         {
-            $scope = $i['scope'];
-            if (!isset($result[$scope])) {
-                $result[$scope] = [];
-            }
-            array_push($result[$scope], [
-                'command' => $i['command'],
-                'description' => $i['description']
-            ]);
+            array_push($result, new BotCommand($i));
         }
         return $result;
     }
@@ -116,18 +110,17 @@ class Bot extends Model
     {
         $this->tokenSeed((string) $this->token);
     }
-
-    public function afterSave()
+    public function afterCreate(): void
     {
-        $this->webhook = $this->is_active ?? false;
-        foreach ($this->commands as $key => $value)
-        {
-            $this->api()->setMyCommands([
-                'commands' => $value,
-                'scope' => new CommandScope((string) $key)
-            ]);
-        }
     }
+
+    public function afterUpdate()
+    {
+        $this->api()->setMyCommands([
+            'commands' => $this->commands ?? [],
+            'scope' => new CommandScope('default')
+        ]);
+}
 
     private function tokenSeed(string $token)
     {

@@ -38,15 +38,15 @@ tabs:
             titleFrom: command
             form:
                 fields:
-                    scope:
-                        label: Who can run your command?
-                        type: dropdown
-                        span: right
-                        options:
-                            default: Available for all
-                            all_private_chats: All private chats
-                            all_group_chats: All group chats
-                            all_chat_administrators: All chat administrators
+                    # scope:
+                    #     label: Who can run your command?
+                    #     type: dropdown
+                    #     span: right
+                    #     options:
+                    #         default: Available for all
+                    #         all_private_chats: All private chats
+                    #         all_group_chats: All group chats
+                    #         all_chat_administrators: All chat administrators
                     command:
                         label: Command
                         comment: max = 32 symbols
