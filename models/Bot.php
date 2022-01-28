@@ -1,11 +1,11 @@
 <?php namespace Croqo\Telegram\Models;
 
-use App;
-use Croqo\Telegram\Classes\Data;
+use Croqo\Telegram\Classes\CommandScope;
 use Croqo\Telegram\Helpers\Webhook;
 use Croqo\Telegram\Models\User;
 use October\Rain\Database\Model;
 use Telegram\Bot\Api;
+use Telegram\Bot\Objects\BotCommand;
 
 /**
  * Bot Model
@@ -43,7 +43,6 @@ class Bot extends Model
     protected $guarded = ['*'];
     protected $fillable = [
         'is_active',
-        'token',
         'data'
     ];
 
@@ -67,6 +66,17 @@ class Bot extends Model
     public function getId(): int
     {
          return $this->id;
+    }
+
+    public function getCommandsAttribute()
+    {
+        $array = $this->data['commands'];
+        $result = [];
+        foreach ($array as $i)
+        {
+            array_push($result, new BotCommand($i));
+        }
+        return $result;
     }
 
     public function scopeIsActive($query)
@@ -100,46 +110,26 @@ class Bot extends Model
     {
         $this->tokenSeed((string) $this->token);
     }
+    public function afterCreate(): void
+    {
+    }
 
     public function afterUpdate()
     {
-        $this->webhook = $this->is_active ?? false;
-        // $result = $this->data ?? [];
-        // foreach ($result as $item)
-        // {
-        //     $group = $item['_group'];
-        //     unset($item['_group']);
-        //     switch ($group)
-        //     {
-        //         default: array_push($result[$group],
-        //             Trigger::command(
-        //                 $item['command'],
-        //                 $item['description']
-        //             )
-        //         );
-        //     }
-        // }
-
-        // trace_log($this->data);
-        // $this->api()->setMyCommands([
-        //     'commands' => $result
-        // ]);
-    }
-
-    // public function afterSave()
-    // {
-
-    // }
+        $this->api()->setMyCommands([
+            'commands' => $this->commands ?? [],
+            'scope' => new CommandScope('default')
+        ]);
+}
 
     private function tokenSeed(string $token)
     {
         if ($bot = $this->api($token)->getMe())
         {
             $this->token = $token;
-            $this->id = $this->getId();
+            $this->id = $bot->getId();
             $this->webhook = $this->is_active = true;
-            $this->data = new Data();
-            $this->user = User::from($bot);
+            $this->data = [];
         }
     }
     public static function tokenId(string $token): int

@@ -2,7 +2,8 @@
 
 use Config;
 use Input;
-use Croqo\Telegram\Types\Update;
+use Telegram\Bot\Objects\Update;
+use Croqo\Telegram\Models\Update as UpdateModel;
 
 class Webhook
 {
@@ -16,9 +17,11 @@ class Webhook
         $param = (string) $argument;
         return url("{$path}/{$param}");
     }
-    public static function update(): Update
+    public static function update(): UpdateModel
     {
         $input = Input::all();
-        return new Update( $input );
+        return UpdateModel::create([
+            'data' => new Update( $input )
+        ]);
     }
 }

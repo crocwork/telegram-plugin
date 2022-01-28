@@ -15,6 +15,7 @@ class CreateUpdatesTable extends Migration
             $table->engine = "InnoDB";
             $table->increments('id');
             $table->json('data');
+            $table->timestamps();
         });
     }
 

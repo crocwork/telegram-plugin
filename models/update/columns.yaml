@@ -4,5 +4,8 @@
 
 columns:
     id:
-        label: ID
+        label: #
+        searchable: true
+    data[update_id]:
+        label: 🆔
         searchable: true

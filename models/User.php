@@ -10,7 +10,6 @@ class User extends Model
     public $incrementing = false;
     protected $guarded = ['*'];
     protected $fillable = [
-        "id",
         "is_bot",
         "first_name",
         "last_name",
@@ -38,20 +37,16 @@ class User extends Model
             self::make([ 'id' => $i ])
         ;
     }
-    public static function from(UserObject $user): User
+    public static function from(UserObject $user)
     {
-        $user =
-            self::firstOrNew([
-                'id'            => $user->getId(),
-                "is_bot"        => $user->getIsBot(),
-                "first_name"    => $user->getFirstName(),
-                "last_name"     => $user->getLastName(),
-                "username"      => $user->getUsername(),
-                "language_code" => $user->getLanguageCode(),
-                    // $this->can_join_groups = $bot->getCanJoinGroups();
-                    // $this->supports_inline_queries = $bot->getSupportsInlineQueries();
-            ])
-        ;
-        return $user;
+        $result = self::id($user->getId());
+        $result->fill([
+            "is_bot"        => $user->getIsBot(),
+            "first_name"    => $user->getFirstName(),
+            "last_name"     => $user->getLastName(),
+            "username"      => $user->getUsername(),
+            "language_code" => $user->getLanguageCode(),
+        ]);
+        return $result;
     }
 }
