@@ -13,8 +13,8 @@ class Update extends Model
         'updated_at'
     ];
 
-    public function getDataAttribute(): array
+    public function getDataAttribute(): string //JSON
     {
-        return $this->attributes['data'] ?? [];
+        return $this->attributes['data'];
     }
 }

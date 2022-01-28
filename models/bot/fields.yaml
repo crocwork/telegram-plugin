@@ -6,16 +6,20 @@ fields:
     is_active@update:
         type: switch
         tab: Setup
+        span: left
+    token@update:
         span: right
+        readOnly: true
 
 
 tabs:
     icons:
         Commands: icon-list
+        Callbacks: icon-list
         Setup: icon-cog
 
     fields:
-        token:
+        token@create:
             label: 🔐 bot token
             required: true
             placeholder: 'example: 1234567890:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw'
@@ -23,19 +27,12 @@ tabs:
             tab: Setup
             comment: The token is a string, that is required to authorize the bot and send requests to the Bot API. It can be used by anyone to control your bot.
 
-        # data[actions]@update:
-        #     tab: Actions
-        #     type: repeater
-        #     style: default
-        #     maxItems: 100
-        #     prompt: ✖️ Action
-        #     form:
-        #         fields:
         data[commands]@update:
             type: repeater
             tab: Commands
             prompt: New 💻 command
             titleFrom: command
+            style: collapsed
             form:
                 fields:
                     # scope:
@@ -57,33 +54,20 @@ tabs:
                         placeholder: 'Few words to make it clean for users'
                         type: textarea
                         size: small
-                # bot_command:
-                #     name: /command
-                #     description: 'example: /start'
-                #     icon: icon-magic
-                #     fields:
-                #         command:
-                #             label: Command
-                #             placeholder: 'without leading / slash (max: 32 symbols)'
-                #             span: auto
-                #         description:
-                #             label: Description
-                #             placeholder: 'Few words to make it clear for users (max: 256 symbols)'
-                #             type: textarea
-                #             span: auto
-                #             size: small
-                    # callbacks:
-                    #     type: repeater
-                    #     prompt: ✖️ Callbacks
-                    #     form:
-                    #         fields:
-                    #             text:
-                    #                 label: Keyboard button caption text (or em😊ji)
-                    #                 span: auto
-                    #             callback_data:
-                    #                 type: textarea
-                    #                 label: Callback Data
-                    #                 placeholder: 1-64 bytes
-                    #                 span: auto
-                    #                 size: small
+
+        data[callbacks]@update:
+            type: repeater
+            tab: Callbacks
+            prompt: New ✖️ Callback
+            form:
+                fields:
+                    text:
+                        label: Keyboard button caption text (or em😊ji)
+                        span: auto
+                    callback_data:
+                        type: textarea
+                        label: Callback Data
+                        placeholder: 1-64 bytes
+                        span: auto
+                        size: small
 

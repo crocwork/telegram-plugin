@@ -8,6 +8,7 @@ use System\Classes\PluginBase;
 use Croqo\Telegram\Models\Bot;
 use Croqo\Telegram\Helpers\Webhook;
 use Telegram\Bot\Api;
+use Telegram\Bot\Objects\Update as TelegramUpdate;
 
 /**
  * Telegram Plugin Information File
@@ -42,52 +43,56 @@ class Plugin extends PluginBase
         });
         Event::listen(
             'croqo.telegram.post',
-            function($id)
+            function($id, $update)
             {
                 $bot = Bot::findOrFail($id);
-                App::instance('croqo.telegram.bot', $bot);
+                // App::instance('croqo.telegram.bot', $bot);
+                trace_log($bot);
+                // App::instance('croqo.telegram.update', $update);
+                $data = new TelegramUpdate($update->data);
+                if ($message = $data->getMessage())
+                {
+                    if ($message->hasCommand())
+                    {
+                        $text = $message->getText();
+                        $entities = $message->getEntities();
+
+                        $comm = $entities->where('type', 'bot_command')->first();
+                        $command = substr($text, $comm['offset'], $comm['length']);
+                        $command = trim($command, '/');
+                        $array = explode('@',$command);
+                        $command = $array[0];
+                        Event::fire('croqo.telegram.command', [$command]);
+                    }
+
+                    $type = $message->detectType();
+                    switch ($type)
+                    {
+                        // case 'message':
+                        // 'edited_message',
+                        // 'channel_post',
+                        // 'edited_channel_post',
+                        // 'inline_query',
+                        // 'chosen_inline_result',
+                        // 'callback_query',
+                        // 'shipping_query',
+                        // 'pre_checkout_query',
+                        // 'poll',
+                    }
+                    trace_log( "Message type: {$type}" );
+
+                    $chat = $message->getChat();
+                    trace_log( $chat );
+                    $user = $message->getFrom();
+                    trace_log( $user );
+                }
+
             }
         );
         Event::listen('croqo.telegram.update', function($update){
             // $api = App::make('croqo.telegram.api');
             $bot = App::make('croqo.telegram.bot');
-            trace_log($bot);
 
-            App::instance('croqo.telegram.update', $update);
-            $message = $update->getMessage();
-
-            if ($message->hasCommand())
-            {
-                $text = $message->getText();
-                $entities = $message->getEntities();
-
-                $comm = $entities->where('type', 'bot_command')->first();
-                $command = substr($text, $comm['offset'], $comm['length']);
-                $command = trim($command, '/');
-
-                Event::fire('croqo.telegram.command', [$command]);
-            }
-
-            $type = $message->detectType();
-            switch ($type)
-            {
-                // case 'message':
-                // 'edited_message',
-                // 'channel_post',
-                // 'edited_channel_post',
-                // 'inline_query',
-                // 'chosen_inline_result',
-                // 'callback_query',
-                // 'shipping_query',
-                // 'pre_checkout_query',
-                // 'poll',
-            }
-            trace_log( "Message type: {$type}" );
-
-            $chat = $message->getChat();
-            trace_log( $chat );
-            $user = $message->getFrom();
-            trace_log( $user );
         });
     }
 
@@ -140,6 +145,12 @@ class Plugin extends PluginBase
                         'icon'        => 'icon-paper-plane',
                         'url'         => Backend::url('croqo/telegram/bots'),
                         'permissions' => ['croqo.telegram.access_bots'],
+                    ],
+                    'updates'      => [
+                        'label'       => 'Updates',
+                        'icon'        => 'icon-paper-plane',
+                        'url'         => Backend::url('croqo/telegram/updates'),
+                        'permissions' => ['croqo.telegram.access_updates'],
                     ],
                 ],
             ],
