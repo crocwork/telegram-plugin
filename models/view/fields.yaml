@@ -1,0 +1,82 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    id@update:
+        label: ID
+        disabled: true
+        hidden: true
+
+    type:
+        label: Templates
+        type: dropdown
+        span: auto
+        options:
+            - default
+            - message
+
+    text:
+        label: Message text
+        type: markdown
+        size: huge
+        mode: split
+
+    keyboard:
+        label: Keyboard
+        type: repeater
+        prompt: ➕ keyboard row
+        form:
+            fields:
+                row:
+                    type: repeater
+                    prompt: Click to select the button
+                    span: auto
+                    form:
+                        fields:
+                            button:
+                                label: Button
+                                type: recordfinder
+                                list: ~/plugins/croqo/telegram/models/button/columns.yaml
+                                nameFrom: text
+                                descriptionFrom: data
+                                useRelation: false
+                                modelClass: Croqo\Telegram\Models\Button
+
+        # groups:
+        #     data:
+        #         name: Callback
+        #         description: Callback data
+        #         icon: icon-quote-right
+        #         fields:
+        #             text:
+        #                 span: auto
+        #             data:
+        #                 span: auto
+        #     link:
+        #         name: URL link
+        #         description: Go out from the telegram
+        #         icon: icon-quote-right
+        #         fields:
+        #             text:
+        #                 span: auto
+        #             url:
+        #                 span: auto
+        #     self:
+        #         name: Inline menu
+        #         description: Go out from the telegram
+        #         icon: icon-quote-right
+        #         fields:
+        #             text:
+        #                 span: auto
+        #             switch_inline_query_current_chat:
+        #                 span: auto
+        #     chat:
+        #         name: Inline to chat
+        #         description: Go out from the telegram
+        #         icon: icon-quote-right
+        #         fields:
+        #             text:
+        #                 span: auto
+        #             switch_inline_query:
+        #                 span: auto

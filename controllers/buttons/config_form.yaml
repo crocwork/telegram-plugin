@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Button
+
+# Model Form Field configuration
+form: $/croqo/telegram/models/button/fields.yaml
+
+# Model Class name
+modelClass: Croqo\Telegram\Models\Button
+
+# Default redirect location
+defaultRedirect: croqo/telegram/buttons
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: croqo/telegram/buttons/update/:id
+    redirectClose: croqo/telegram/buttons
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: croqo/telegram/buttons
+    redirectClose: croqo/telegram/buttons
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

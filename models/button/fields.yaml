@@ -1,0 +1,29 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    text:
+        label: Key caption
+        span: auto
+
+    id@update:
+        label: ID
+        disabled: true
+        span: auto
+    type:
+        label: Button type
+        type: dropdown
+        span: left
+        options:
+            callback_data: Callback data
+            url: URL link
+            # login_url:
+            # switch_inline_query:
+            # switch_inline_query_current_chat:
+            # callback_game:
+            # pay:
+    data:
+        label: Argument
+        span: auto
+        comment: relative to selected type

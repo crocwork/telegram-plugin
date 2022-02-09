@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: View
+
+# Model Form Field configuration
+form: $/croqo/telegram/models/view/fields.yaml
+
+# Model Class name
+modelClass: Croqo\Telegram\Models\View
+
+# Default redirect location
+defaultRedirect: croqo/telegram/views
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: croqo/telegram/views/update/:id
+    redirectClose: croqo/telegram/views
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: croqo/telegram/views
+    redirectClose: croqo/telegram/views
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title
