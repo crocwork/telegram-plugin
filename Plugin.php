@@ -146,6 +146,18 @@ class Plugin extends PluginBase
                         'url'         => Backend::url('croqo/telegram/bots'),
                         'permissions' => ['croqo.telegram.access_bots'],
                     ],
+                    'views'      => [
+                        'label'       => 'Views',
+                        'icon'        => 'icon-envelope-o',
+                        'url'         => Backend::url('croqo/telegram/views'),
+                        'permissions' => ['croqo.telegram.access_views'],
+                    ],
+                    'buttons'      => [
+                        'label'       => 'Buttons',
+                        'icon'        => 'icon-keyboard-o',
+                        'url'         => Backend::url('croqo/telegram/buttons'),
+                        'permissions' => ['croqo.telegram.access_views'],
+                    ],
                     'updates'      => [
                         'label'       => 'Updates',
                         'icon'        => 'icon-paper-plane',

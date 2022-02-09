@@ -10,3 +10,9 @@ v0.1.0:
 v0.2.0:
     - Update model
     - create_updates_table.php
+v0.2.1:
+    - View (reply) model
+    - create_views_table.php
+v0.2.2:
+    - Button model
+    - create_buttons_table.php
