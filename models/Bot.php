@@ -1,8 +1,8 @@
-<?php namespace Croqo\Telegram\Models;
+<?php namespace Crocwork\Telegram\Models;
 
-use Croqo\Telegram\Classes\CommandScope;
-use Croqo\Telegram\Helpers\Webhook;
-use Croqo\Telegram\Models\User;
+use Crocwork\Telegram\Classes\CommandScope;
+use Crocwork\Telegram\Helpers\Webhook;
+use Crocwork\Telegram\Models\User;
 use October\Rain\Database\Model;
 use Telegram\Bot\Api;
 use Telegram\Bot\Objects\BotCommand;
@@ -37,7 +37,7 @@ class Bot extends Model
         return new Api($this->token, false);
     }
 
-    public $table = 'croqo_telegram_bots';
+    public $table = 'crocwork_telegram_bots';
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $guarded = ['*'];

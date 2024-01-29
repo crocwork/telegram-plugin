@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Column configuration
-list: $/croqo/telegram/models/bot/columns.yaml
+list: $/crocwork/telegram/models/bot/columns.yaml
 
 # Model Class name
-modelClass: Croqo\Telegram\Models\Bot
+modelClass: Crocwork\Telegram\Models\Bot
 
 # List Title
-title: croqo.telegram::lang.controller.bot.list.title
+title: crocwork.telegram::lang.controller.bot.list.title
 
 # Link URL for each record
-recordUrl: croqo/telegram/bots/update/:id
+recordUrl: crocwork/telegram/bots/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

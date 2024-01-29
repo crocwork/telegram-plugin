@@ -1,15 +1,15 @@
-<?php namespace Croqo\Telegram\Helpers;
+<?php namespace Crocwork\Telegram\Helpers;
 
 use Config;
 use Input;
 use Telegram\Bot\Objects\Update;
-use Croqo\Telegram\Models\Update as UpdateModel;
+use Crocwork\Telegram\Models\Update as UpdateModel;
 
 class Webhook
 {
     public static function path(): string
     {
-        return Config::get('croqo.telegram::webhook.path');
+        return Config::get('crocwork.telegram::webhook.path');
     }
     public static function url($argument): string
     {

@@ -1,4 +1,4 @@
-<?php namespace Croqo\Telegram\Classes;
+<?php namespace Crocwork\Telegram\Classes;
 
 use October\Rain\Support\Collection;
 

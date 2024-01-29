@@ -1,4 +1,4 @@
-<?php namespace Croqo\Telegram\Components;
+<?php namespace Crocwork\Telegram\Components;
 
 use Cms\Classes\ComponentBase;
 
@@ -19,27 +19,27 @@ class Login extends ComponentBase
     {
         return [
             "name" => [
-                'title'             => "croqo.telegram::lang.components.login.name.title",
-                'description'       => "croqo.telegram::lang.components.login.name.desc",
+                'title'             => "crocwork.telegram::lang.components.login.name.title",
+                'description'       => "crocwork.telegram::lang.components.login.name.desc",
                 'type'              => 'string',
             ],
             "size" => [
-                'title'             => "croqo.telegram::lang.components.login.size.title",
-                'description'       => "croqo.telegram::lang.components.login.size.desc",
+                'title'             => "crocwork.telegram::lang.components.login.size.title",
+                'description'       => "crocwork.telegram::lang.components.login.size.desc",
                 'type'              => 'dropdown',
                 'options'           => ['large' => 'Large','medium' => 'Medium', 'small' => 'Small']
             ],
             "rad" => [
-                'title'             => "croqo.telegram::lang.components.login.rad.title",
-                'description'       => "croqo.telegram::lang.components.login.rad.desc",
+                'title'             => "crocwork.telegram::lang.components.login.rad.title",
+                'description'       => "crocwork.telegram::lang.components.login.rad.desc",
                 'type'              => 'string',
                 'default'           => 10,
                 'validationPattern' => '^[0-9]+$',
                 'validationMessage' => 'The property can contain only numeric symbols'
             ],
             "url" => [
-                'title'             => "croqo.telegram::lang.components.login.url.title",
-                'description'       => "croqo.telegram::lang.components.login.url.desc",
+                'title'             => "crocwork.telegram::lang.components.login.url.title",
+                'description'       => "crocwork.telegram::lang.components.login.url.desc",
                 'type'              => 'string',
             ]
         ];

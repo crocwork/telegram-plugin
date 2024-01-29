@@ -1,7 +1,7 @@
-<?php namespace Croqo\Telegram\Classes;
+<?php namespace Crocwork\Telegram\Classes;
 
 use Exception;
-use Croqo\Telegram\Models\Settings;
+use Crocwork\Telegram\Models\Settings;
 
 class Signature
 {

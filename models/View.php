@@ -1,4 +1,4 @@
-<?php namespace Croqo\Telegram\Models;
+<?php namespace Crocwork\Telegram\Models;
 
 use Model;
 
@@ -12,7 +12,7 @@ class View extends Model
     /**
      * @var string table associated with the model
      */
-    public $table = 'croqo_telegram_views';
+    public $table = 'crocwork_telegram_views';
 
     /**
      * @var array guarded attributes aren't mass assignable

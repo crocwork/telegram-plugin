@@ -1,6 +1,6 @@
 <?php
 
-use Croqo\Telegram\Models\Bot;
+use Crocwork\Telegram\Models\Bot;
 
 return [
     "bots" => Bot::all('is_active', 1),

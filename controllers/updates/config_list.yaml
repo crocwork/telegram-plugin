@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Column configuration
-list: $/croqo/telegram/models/update/columns.yaml
+list: $/crocwork/telegram/models/update/columns.yaml
 
 # Model Class name
-modelClass: Croqo\Telegram\Models\Update
+modelClass: Crocwork\Telegram\Models\Update
 
 # List Title
 title: Manage Updates
 
 # Link URL for each record
-recordUrl: croqo/telegram/updates/update/:id
+recordUrl: crocwork/telegram/updates/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

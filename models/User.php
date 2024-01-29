@@ -1,11 +1,11 @@
-<?php namespace Croqo\Telegram\Models;
+<?php namespace Crocwork\Telegram\Models;
 
 use Telegram\Bot\Objects\User as UserObject;
 use Model;
 
 class User extends Model
 {
-    public $table = 'croqo_telegram_users';
+    public $table = 'crocwork_telegram_users';
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $guarded = ['*'];
