@@ -1,7 +1,7 @@
 
 plugin:
-  name: croqo.telegram::lang.plugin.name
-  description: croqo.telegram::lang.plugin.description
-  author: croqo.telegram::lang.plugin.author
+  name: Ⓜ️ Microgram
+  description: crocwork.telegram::lang.plugin.description
+  author: crocwork.telegram::lang.plugin.author
   icon: icon-play-circle
-  homepage: https://github.com/croqo/oc-telegram-plugin
+  homepage: https://github.com/crocwork/telegram-plugin
