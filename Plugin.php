@@ -1,12 +1,12 @@
-<?php namespace Croqo\Telegram;
+<?php namespace Crocwork\Telegram;
 
 use App;
 use Backend;
 use Event;
 use System\Classes\PluginBase;
 
-use Croqo\Telegram\Models\Bot;
-use Croqo\Telegram\Helpers\Webhook;
+use Crocwork\Telegram\Models\Bot;
+use Crocwork\Telegram\Helpers\Webhook;
 use Telegram\Bot\Api;
 use Telegram\Bot\Objects\Update as TelegramUpdate;
 
@@ -36,19 +36,19 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-        Event::listen('croqo.telegram.command', function($command){
+        Event::listen('crocwork.telegram.command', function($command){
             trace_log("Command: {$command}");
-            // $bot = App::make('croqo.telegram.bot');
+            // $bot = App::make('crocwork.telegram.bot');
             // trace_log($bot);
         });
         Event::listen(
-            'croqo.telegram.post',
+            'crocwork.telegram.post',
             function($id, $update)
             {
                 $bot = Bot::findOrFail($id);
-                // App::instance('croqo.telegram.bot', $bot);
+                // App::instance('crocwork.telegram.bot', $bot);
                 trace_log($bot);
-                // App::instance('croqo.telegram.update', $update);
+                // App::instance('crocwork.telegram.update', $update);
                 $data = new TelegramUpdate($update->data);
                 if ($message = $data->getMessage())
                 {
@@ -62,7 +62,7 @@ class Plugin extends PluginBase
                         $command = trim($command, '/');
                         $array = explode('@',$command);
                         $command = $array[0];
-                        Event::fire('croqo.telegram.command', [$command]);
+                        Event::fire('crocwork.telegram.command', [$command]);
                     }
 
                     $type = $message->detectType();
@@ -89,9 +89,9 @@ class Plugin extends PluginBase
 
             }
         );
-        Event::listen('croqo.telegram.update', function($update){
-            // $api = App::make('croqo.telegram.api');
-            $bot = App::make('croqo.telegram.bot');
+        Event::listen('crocwork.telegram.update', function($update){
+            // $api = App::make('crocwork.telegram.api');
+            $bot = App::make('crocwork.telegram.bot');
 
         });
     }
@@ -105,7 +105,7 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-            'Croqo\Telegram\Components\Login' => 'telegramLogin',
+            'Crocwork\Telegram\Components\Login' => 'telegramLogin',
         ];
     }
 
@@ -117,7 +117,7 @@ class Plugin extends PluginBase
     public function registerPermissions()
     {
         return [
-            'croqo.telegram.access_settings' => [
+            'crocwork.telegram.access_settings' => [
                 'tab' => 'Telegram',
                 'label' => 'Settings'
             ],
@@ -134,35 +134,35 @@ class Plugin extends PluginBase
         return [
             'telegram' => [
                 'label'       => 'Telegram',
-                'url'         => Backend::url('croqo/telegram/bots'),
+                'url'         => Backend::url('crocwork/telegram/bots'),
                 'icon'        => 'icon-paper-plane',
-                'permissions' => ['croqo.telegram.*'],
+                'permissions' => ['crocwork.telegram.*'],
                 'order'       => 500,
                 'sideMenu'    =>
                 [
                     'bots'      => [
                         'label'       => 'Bots',
                         'icon'        => 'icon-paper-plane',
-                        'url'         => Backend::url('croqo/telegram/bots'),
-                        'permissions' => ['croqo.telegram.access_bots'],
+                        'url'         => Backend::url('crocwork/telegram/bots'),
+                        'permissions' => ['crocwork.telegram.access_bots'],
                     ],
                     'views'      => [
                         'label'       => 'Views',
                         'icon'        => 'icon-envelope-o',
-                        'url'         => Backend::url('croqo/telegram/views'),
-                        'permissions' => ['croqo.telegram.access_views'],
+                        'url'         => Backend::url('crocwork/telegram/views'),
+                        'permissions' => ['crocwork.telegram.access_views'],
                     ],
                     'buttons'      => [
                         'label'       => 'Buttons',
                         'icon'        => 'icon-keyboard-o',
-                        'url'         => Backend::url('croqo/telegram/buttons'),
-                        'permissions' => ['croqo.telegram.access_views'],
+                        'url'         => Backend::url('crocwork/telegram/buttons'),
+                        'permissions' => ['crocwork.telegram.access_views'],
                     ],
                     'updates'      => [
                         'label'       => 'Updates',
                         'icon'        => 'icon-paper-plane',
-                        'url'         => Backend::url('croqo/telegram/updates'),
-                        'permissions' => ['croqo.telegram.access_updates'],
+                        'url'         => Backend::url('crocwork/telegram/updates'),
+                        'permissions' => ['crocwork.telegram.access_updates'],
                     ],
                 ],
             ],

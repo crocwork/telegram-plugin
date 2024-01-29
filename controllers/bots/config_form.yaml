@@ -3,28 +3,28 @@
 # ===================================
 
 # Record name
-name: croqo.telegram::lang.bot.is
+name: crocwork.telegram::lang.bot.is
 
 # Model Form Field configuration
-form: $/croqo/telegram/models/bot/fields.yaml
+form: $/crocwork/telegram/models/bot/fields.yaml
 
 # Model Class name
-modelClass: Croqo\Telegram\Models\Bot
+modelClass: Crocwork\Telegram\Models\Bot
 
 # Default redirect location
-defaultRedirect: croqo/telegram/bots
+defaultRedirect: crocwork/telegram/bots
 
 # Create page
 create:
     title: backend::lang.form.create_title
-    redirect: croqo/telegram/bots/update/:id
-    redirectClose: croqo/telegram/bots
+    redirect: crocwork/telegram/bots/update/:id
+    redirectClose: crocwork/telegram/bots
 
 # Update page
 update:
     title: backend::lang.form.update_title
-    redirect: croqo/telegram/bots
-    redirectClose: croqo/telegram/bots
+    redirect: crocwork/telegram/bots
+    redirectClose: crocwork/telegram/bots
 
 # Preview page
 preview:

@@ -6,25 +6,25 @@
 name: Button
 
 # Model Form Field configuration
-form: $/croqo/telegram/models/button/fields.yaml
+form: $/crocwork/telegram/models/button/fields.yaml
 
 # Model Class name
-modelClass: Croqo\Telegram\Models\Button
+modelClass: Crocwork\Telegram\Models\Button
 
 # Default redirect location
-defaultRedirect: croqo/telegram/buttons
+defaultRedirect: crocwork/telegram/buttons
 
 # Create page
 create:
     title: backend::lang.form.create_title
-    redirect: croqo/telegram/buttons/update/:id
-    redirectClose: croqo/telegram/buttons
+    redirect: crocwork/telegram/buttons/update/:id
+    redirectClose: crocwork/telegram/buttons
 
 # Update page
 update:
     title: backend::lang.form.update_title
-    redirect: croqo/telegram/buttons
-    redirectClose: croqo/telegram/buttons
+    redirect: crocwork/telegram/buttons
+    redirectClose: crocwork/telegram/buttons
 
 # Preview page
 preview:

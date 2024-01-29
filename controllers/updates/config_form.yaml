@@ -6,25 +6,25 @@
 name: Update
 
 # Model Form Field configuration
-form: $/croqo/telegram/models/update/fields.yaml
+form: $/crocwork/telegram/models/update/fields.yaml
 
 # Model Class name
-modelClass: Croqo\Telegram\Models\Update
+modelClass: Crocwork\Telegram\Models\Update
 
 # Default redirect location
-defaultRedirect: croqo/telegram/updates
+defaultRedirect: crocwork/telegram/updates
 
 # Create page
 create:
     title: backend::lang.form.create_title
-    redirect: croqo/telegram/updates/update/:id
-    redirectClose: croqo/telegram/updates
+    redirect: crocwork/telegram/updates/update/:id
+    redirectClose: crocwork/telegram/updates
 
 # Update page
 update:
     title: backend::lang.form.update_title
-    redirect: croqo/telegram/updates
-    redirectClose: croqo/telegram/updates
+    redirect: crocwork/telegram/updates
+    redirectClose: crocwork/telegram/updates
 
 # Preview page
 preview:

@@ -1,13 +1,13 @@
-<?php namespace Croqo\Telegram\Classes;
+<?php namespace Crocwork\Telegram\Classes;
 
 use Input;
 use Events;
 use Exception;
-use Croqo\Telegram\Classes\Signature;
+use Crocwork\Telegram\Classes\Signature;
 use Event;
 use RainLab\User\Facades\Auth;
 use RainLab\User\Models\User as CmsUser;
-use Croqo\Telegram\Models\User as TelegramUser;
+use Crocwork\Telegram\Models\User as TelegramUser;
 
 
 class Login
@@ -62,7 +62,7 @@ class Login
         return $user;
     }
 
-    public static function getTelegramUser(array $auth_data) : \Croqo\Telegram\Models\User
+    public static function getTelegramUser(array $auth_data) : \Crocwork\Telegram\Models\User
     {
         $data = $auth_data;
         $user = TelegramUser::where([

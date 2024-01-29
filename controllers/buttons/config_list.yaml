@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Column configuration
-list: $/croqo/telegram/models/button/columns.yaml
+list: $/crocwork/telegram/models/button/columns.yaml
 
 # Model Class name
-modelClass: Croqo\Telegram\Models\Button
+modelClass: Crocwork\Telegram\Models\Button
 
 # List Title
 title: Manage Buttons
 
 # Link URL for each record
-recordUrl: croqo/telegram/buttons/update/:id
+recordUrl: crocwork/telegram/buttons/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

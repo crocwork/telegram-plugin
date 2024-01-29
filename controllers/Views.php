@@ -1,4 +1,4 @@
-<?php namespace Croqo\Telegram\Controllers;
+<?php namespace Crocwork\Telegram\Controllers;
 
 use BackendMenu;
 use Backend\Classes\Controller;
@@ -30,6 +30,6 @@ class Views extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('Croqo.Telegram', 'telegram', 'views');
+        BackendMenu::setContext('Crocwork.Telegram', 'telegram', 'views');
     }
 }

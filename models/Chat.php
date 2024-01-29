@@ -1,11 +1,11 @@
-<?php namespace Croqo\Telegram\Models;
+<?php namespace Crocwork\Telegram\Models;
 
 use Doctrine\DBAL\Types\BigIntType;
 use Model;
 
 class Chat extends Model
 {
-    public $table = 'croqo_telegram_chats';
+    public $table = 'crocwork_telegram_chats';
 
     public $incrementing = false;
 
